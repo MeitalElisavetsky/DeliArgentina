@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... (your existing head content) -->
+</head>
+<body>
+    <h1>{{ category_name }}</h1>
+    <ul>
+        {% for recipe in recipes %}
+            <li>{{ recipe['Recipe_name'] }}</li>
+            {% if recipe['Category_name'] == category_name.lower() %}
+                <p>Match found!</p>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</body>
+</html>
