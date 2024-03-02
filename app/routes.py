@@ -45,14 +45,25 @@ def recipe(recipe_id):
 # New route for displaying categories
 @app.route('/category/<category_name>')
 def category(category_name):
-    # You need to fetch the recipes for the specified category and pass them to the template
-    recipes = mongo.db.recipes.find({"category_info.name": category_name})
-    return render_template('category.html', category_name=category_name, recipes=recipes)
+    # Find the category by name
+    category = mongo.db.categories.find_one({"name": category_name})
+
+    if category:
+        # Get the category ID
+        category_id = category["_id"]
+
+        # Fetch the recipes for the specified category
+        recipes = mongo.db.recipes.find({"category": category_id})
+        return render_template('category.html', category_name=category_name, recipes=recipes)
+
+    return "Category not found"
+
 
 
 # Updated route for inserting recipes only if they don't exist
 @app.route('/insert_sample_data')
 def insert_sample_data():
+
     # Define the sample recipe details
     sample_recipe_data = {
         "name": "Sample Recipe",
