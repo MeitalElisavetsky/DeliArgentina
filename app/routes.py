@@ -49,21 +49,27 @@ def category(category_name):
     recipes = mongo.db.recipes.find({"category_info.name": category_name})
     return render_template('category.html', category_name=category_name, recipes=recipes)
 
+
 # Updated route for inserting recipes only if they don't exist
 @app.route('/insert_sample_data')
 def insert_sample_data():
-    # Check if sample recipe exists before inserting
-    if not mongo.db.recipes.find_one({"name": "Sample Recipe"}):
+    # Define the sample recipe details
+    sample_recipe_data = {
+        "name": "Sample Recipe",
+        "description": "A delicious dessert",
+        "ingredients": ['Ingredient 1', 'Ingredient 2'],
+        "instructions": 'Step 1, Step 2, ...'
+    }
+
+    # Check if the sample recipe exists before inserting
+    if not mongo.db.recipes.find_one({"name": sample_recipe_data["name"]}):
         # Get category ID for Desserts category (adjust as needed)
         desserts_id = mongo.db.categories.find_one({"name": "Desserts"})["_id"]
 
         # Insert sample recipe
-        mongo.db.recipes.insert_one({
-            "name": "Sample Recipe",
-            "category": desserts_id,
-            "description": "A delicious dessert",
-            "ingredients": ['Ingredient 1', 'Ingredient 2'],
-            "instructions": 'Step 1, Step 2, ...'
-        })
+        sample_recipe_data["category"] = desserts_id
+        mongo.db.recipes.insert_one(sample_recipe_data)
 
-    return "Sample data inserted successfully!"
+        return "Sample data inserted successfully!"
+
+    return "Sample recipe already exists in the database."
