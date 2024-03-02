@@ -2,6 +2,7 @@
 from flask import render_template
 from bson import ObjectId  # Import ObjectId for creating MongoDB ObjectId
 from app import app, mongo
+from flask import request, redirect, url_for
 
 
 @app.route('/')
@@ -84,3 +85,14 @@ def insert_sample_data():
         return "Sample data inserted successfully!"
 
     return "Sample recipe already exists in the database."
+
+
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('query', '')
+    # Customize this part based on your MongoDB setup
+    # You might want to search for recipes based on the recipe name or other criteria
+    # For example, you can use a case-insensitive search on the recipe name
+    recipes = mongo.db.recipes.find({"name": {"$regex": query, "$options": "i"}})
+    return render_template('search_results.html', query=query, recipes=recipes)
+

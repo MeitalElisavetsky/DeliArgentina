@@ -1,10 +1,32 @@
-<h2>{{ recipe.name }}</h2>
-<p>{{ recipe.description }}</p>
-<h3>Ingredients:</h3>
-<ul>
-  {% for ingredient in recipe.ingredients %}
-    <li>{{ ingredient }}</li>
-  {% endfor %}
-</ul>
-<h3>Instructions:</h3>
-<p>{{ recipe.instructions }}</p>
+<!-- recipe.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2 class="recipe-title">{{ recipe.name }}</h2>
+        <div class="recipe-content">
+            <div class="description">
+                <p>{{ recipe.description }}</p>
+            </div>
+            <div class="ingredients">
+                <h3>Ingredients:</h3>
+                <ul>
+                    {% for ingredient in recipe.ingredients %}
+                        <li>{{ ingredient }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="instructions">
+                <h3>Instructions:</h3>
+                <p>{{ recipe.instructions }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
