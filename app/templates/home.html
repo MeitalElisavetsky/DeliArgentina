@@ -1,0 +1,7 @@
+<h1>Deli Argentina</h1>
+<ul>
+  {% for category in categories %}
+    <li><a href="{{ url_for('category', category_name=category.name) }}">{{ category.name }}</a></li>
+  {% endfor %}
+</ul>
+
