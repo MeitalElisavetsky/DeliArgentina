@@ -2,7 +2,7 @@
 from flask import render_template
 from bson import ObjectId  # Import ObjectId for creating MongoDB ObjectId
 from app import app, mongo
-from flask import request, redirect, url_for
+from flask import request, redirect, url_for, jsonify
 
 
 @app.route('/')
@@ -95,4 +95,19 @@ def search():
     # For example, you can use a case-insensitive search on the recipe name
     recipes = mongo.db.recipes.find({"name": {"$regex": query, "$options": "i"}})
     return render_template('search_results.html', query=query, recipes=recipes)
+
+
+@app.route('/search_suggestions', methods=['POST'])
+def search_suggestions():
+    # Get user input from the request
+    user_input = request.form.get('input', '')
+
+    # Perform a simple search for suggestions (you can customize this based on your needs)
+    suggestions = ['Appetizers', 'Main Courses', 'Desserts', 'Holidays', 'Vegetarian']
+
+    # Filter suggestions based on user input
+    filtered_suggestions = [suggestion for suggestion in suggestions if user_input.lower() in suggestion.lower()]
+
+    # Return suggestions as JSON
+    return jsonify({'suggestions': filtered_suggestions})
 
