@@ -1,0 +1,47 @@
+/* styles.css */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #010142; /* Adjust the background color as needed */
+}
+
+.container {
+    text-align: center;
+    padding: 250px;
+}
+
+.title {
+    font-size: 48px; /* Increase the font size for a bigger title */
+    color: #ffffff; /* Adjust the text color as needed */
+    margin-bottom: 20px; /* Add margin at the bottom to separate the title and buttons */
+}
+
+.category-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allow buttons to wrap to the next line if needed */
+}
+
+.category-button {
+    font-size: 24px; /* Adjust the font size for bigger buttons */
+    padding: 20px; /* Increase padding for bigger buttons */
+    margin: 10px;
+    background-color: #72a5f6; /* Adjust the button background color as needed */
+    color: #000000; /* Adjust the button text color as needed */
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    text-decoration: none; /* Remove underlines from the buttons */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px; /* Set a fixed width for consistency */
+    height: 150px; /* Set a fixed height for consistency */
+}
+
+.category-button:hover {
+    background-color: #2351b4; /* Adjust the button background color on hover as needed */
+}

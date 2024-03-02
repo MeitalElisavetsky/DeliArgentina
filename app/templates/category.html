@@ -1,0 +1,6 @@
+<h2>{{ category_name }}</h2>
+<ul>
+  {% for recipe in recipes %}
+    <li><a href="{{ url_for('recipe', recipe_id=recipe._id) }}">{{ recipe.name }}</a></li>
+  {% endfor %}
+</ul>
