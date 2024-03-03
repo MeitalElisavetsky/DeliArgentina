@@ -23,7 +23,7 @@ body {
     font-size: 16px; /* Adjust the font size for smaller buttons */
     padding: 5px; /* Decrease padding for smaller buttons */
     margin: 5px; /* Decrease margin for smaller buttons */
-    background-color: #72a5f6;
+    background-color: #010142;
     color: #000000;
     border: none;
     cursor: pointer;
@@ -34,11 +34,11 @@ body {
     align-items: center;
     justify-content: center;
     width: 80px; /* Set a smaller fixed width for buttons */
-    height: 80px; /* Set a smaller fixed height for buttons */
+    height: px; /* Set a smaller fixed height for buttons */
 }
 
 .category-button:hover {
-    background-color: #2351b4;
+    background-color: #010142;
 }
 
 /* New styles for the search bar and search results */
@@ -75,7 +75,7 @@ body {
 .suggestions {
     display: none; /* Hide suggestions by default */
     position: absolute;
-    width: 20%;
+    width: 100%;
     max-height: 200px;
     overflow-y: auto;
     background-color: #fff;
