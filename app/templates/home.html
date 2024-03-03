@@ -1,6 +1,7 @@
 <!-- home.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="/static/styles.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
+
 <body>
     <div class="container">
         <h1 class="title">DeliArgentina</h1>
@@ -16,11 +18,11 @@
                 <input type="text" id="search-input" name="query" placeholder="Search for recipes">
                 <button type="submit">Search</button>
             </form>
-            <div id="search-suggestions"></div>
+            <div id="search-suggestions" class="suggestions"></div>
         </div>
         <div class="category-buttons">
             {% for category in categories %}
-                <a class="category-button" href="{{ url_for('category', category_name=category.name) }}">{{ category.name }}</a>
+            <a class="category-button" href="{{ url_for('category', category_name=category.name) }}">{{ category.name }}</a>
             {% endfor %}
         </div>
     </div>
@@ -39,6 +41,13 @@
                 // Perform search based on user input
                 performSearch();
             });
+
+            // Event listener for suggestion clicks
+            $(document).on('click', '.suggestion', function () {
+                const suggestionText = $(this).text();
+                // Redirect to the recipe page corresponding to the clicked suggestion
+                window.location.href = '/search?query=' + encodeURIComponent(suggestionText);
+            });
         });
 
         function fetchSuggestions() {
@@ -52,7 +61,16 @@
                 data: { input: userInput },
                 success: function (response) {
                     // Update the suggestions div with the fetched suggestions
-                    $('#search-suggestions').html(response);
+                    const suggestionsDiv = $('#search-suggestions');
+                    suggestionsDiv.html('');
+
+                    if (response.suggestions.length > 0) {
+                        response.suggestions.forEach((suggestion) => {
+                            suggestionsDiv.append(`<div class="suggestion">${suggestion}</div>`);
+                        });
+                    } else {
+                        suggestionsDiv.append('<div class="no-suggestions">No suggestions found</div>');
+                    }
                 },
                 error: function (error) {
                     console.error('Error fetching suggestions:', error);
@@ -69,4 +87,5 @@
         }
     </script>
 </body>
+
 </html>
