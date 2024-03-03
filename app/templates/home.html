@@ -1,3 +1,6 @@
+Certainly! Here's your existing `home.html` file with the added modifications to handle showing and hiding suggestions only when the user clicks on the search bar and starts typing:
+
+```html
 <!-- home.html -->
 <!DOCTYPE html>
 <html lang="en">
@@ -31,9 +34,15 @@
 
     <script>
         $(document).ready(function () {
+            // Event listener for input focus
+            $('#search-input').on('focus', function () {
+                // Fetch suggestions from the server when the search bar is focused
+                fetchSuggestions();
+            });
+
             // Event listener for input changes
             $('#search-input').on('input', function () {
-                // Fetch suggestions from the server
+                // Fetch suggestions from the server as the user types
                 fetchSuggestions();
             });
 
@@ -49,6 +58,12 @@
                 const suggestionText = $(this).text();
                 // Redirect to the recipe page corresponding to the clicked suggestion
                 window.location.href = '/search?query=' + encodeURIComponent(suggestionText);
+            });
+
+            // Event listener for input blur (when the user clicks outside the search bar)
+            $('#search-input').on('blur', function () {
+                // Hide suggestions when the search bar loses focus
+                $('#search-suggestions').hide();
             });
         });
 
@@ -73,8 +88,7 @@
                         // Show suggestions
                         suggestionsDiv.show();
                     } else {
-                        suggestionsDiv.append('<div class="no-suggestions">No suggestions found</div>');
-                        // Hide suggestions
+                        // Hide suggestions if there are no suggestions
                         suggestionsDiv.hide();
                     }
                 },
@@ -95,3 +109,6 @@
 </body>
 
 </html>
+```
+
+This modification should address the issue of suggestions appearing only when the user clicks on the search bar and starts typing.
