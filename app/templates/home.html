@@ -12,7 +12,7 @@
 
 <body>
     <div class="container">
-        <h1 class="title">DeliArgentina</h1>
+        <h1 class="title"><img src="/static/images/logo2.png" alt="DeliArgentina Logo"></h1>
         <div class="search-bar">
             <form action="{{ url_for('search') }}" method="get">
                 <input type="text" id="search-input" name="query" placeholder="Search for recipes">
@@ -20,9 +20,11 @@
             </form>
             <div id="search-suggestions" class="suggestions"></div>
         </div>
-        <div class="category-buttons">
+        <div class="category-container">
             {% for category in categories %}
-            <a class="category-button" href="{{ url_for('category', category_name=category.name) }}">{{ category.name }}</a>
+            <a class="category-button" href="{{ url_for('category', category_name=category.name) }}">
+                <img src="{{ url_for('static', filename='images/' + category.name.lower() + '.png') }}" alt="{{ category.name }}">
+            </a>
             {% endfor %}
         </div>
     </div>
@@ -68,8 +70,12 @@
                         response.suggestions.forEach((suggestion) => {
                             suggestionsDiv.append(`<div class="suggestion">${suggestion}</div>`);
                         });
+                        // Show suggestions
+                        suggestionsDiv.show();
                     } else {
                         suggestionsDiv.append('<div class="no-suggestions">No suggestions found</div>');
+                        // Hide suggestions
+                        suggestionsDiv.hide();
                     }
                 },
                 error: function (error) {

@@ -1,4 +1,3 @@
-/* styles.css */
 body {
     margin: 0;
     padding: 0;
@@ -7,48 +6,45 @@ body {
 }
 
 .container {
+    display: flex;  /* Use flex container to align items horizontally */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
     text-align: center;
     padding: 50px 20px; /* Adjust padding for better spacing */
 }
 
-.title {
-    font-size: 48px; /* Increase the font size for a bigger title */
-    color: #ffffff; /* Adjust the text color as needed */
-    margin-bottom: 20px; /* Add margin at the bottom to separate the title and buttons */
-}
-
-.category-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap; /* Allow buttons to wrap to the next line if needed */
+.title img {
+    max-width: 100%; /* Ensure the image doesn't exceed its original size */
+    height: auto; /* Maintain the aspect ratio */
+    max-height: 250px; /* Set a maximum height if needed */
 }
 
 .category-button {
-    font-size: 24px; /* Adjust the font size for bigger buttons */
-    padding: 20px; /* Increase padding for bigger buttons */
-    margin: 10px;
-    background-color: #72a5f6; /* Adjust the button background color as needed */
-    color: #000000; /* Adjust the button text color as needed */
+    font-size: 16px; /* Adjust the font size for smaller buttons */
+    padding: 5px; /* Decrease padding for smaller buttons */
+    margin: 5px; /* Decrease margin for smaller buttons */
+    background-color: #72a5f6;
+    color: #000000;
     border: none;
     cursor: pointer;
     border-radius: 8px;
     transition: background-color 0.3s;
-    text-decoration: none; /* Remove underlines from the buttons */
+    text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 150px; /* Set a fixed width for consistency */
-    height: 150px; /* Set a fixed height for consistency */
+    width: 80px; /* Set a smaller fixed width for buttons */
+    height: 80px; /* Set a smaller fixed height for buttons */
 }
 
 .category-button:hover {
-    background-color: #2351b4; /* Adjust the button background color on hover as needed */
+    background-color: #2351b4;
 }
 
 /* New styles for the search bar and search results */
 .search-bar {
     margin-bottom: 20px;
+    position: relative; /* Make the container for suggestions relative to position it */
 }
 
 .search-bar form {
@@ -76,15 +72,19 @@ body {
     background-color: #3367d6;
 }
 
-
 .suggestions {
+    display: none; /* Hide suggestions by default */
     position: absolute;
-    width: 100%;
+    width: 20%;
     max-height: 200px;
     overflow-y: auto;
     background-color: #fff;
     border: 1px solid #ccc;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    top: 100%; /* Position suggestions below the search bar */
+    left: 50%; /* Center suggestions horizontally */
+    transform: translateX(-50%); /* Adjust for centering */
+    z-index: 1;
 }
 
 .suggestion, .no-suggestions {
