@@ -97,17 +97,18 @@ def search():
     return render_template('search_results.html', query=query, recipes=recipes)
 
 
+# Updated route for handling search suggestions
 @app.route('/search_suggestions', methods=['POST'])
 def search_suggestions():
-    # Get user input from the request
     user_input = request.form.get('input', '')
 
-    # Perform a simple search for suggestions (you can customize this based on your needs)
-    suggestions = ['Appetizers', 'Main Courses', 'Desserts', 'Holidays', 'Vegetarian']
+    # Customize this part based on your MongoDB setup
+    # For example, you can fetch recipe names from your MongoDB
+    recipes = mongo.db.recipes.find({}, {'name': 1})
+    suggestions = [recipe['name'] for recipe in recipes]
 
     # Filter suggestions based on user input
     filtered_suggestions = [suggestion for suggestion in suggestions if user_input.lower() in suggestion.lower()]
 
-    # Return suggestions as JSON
     return jsonify({'suggestions': filtered_suggestions})
 
