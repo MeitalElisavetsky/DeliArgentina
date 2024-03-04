@@ -5,6 +5,18 @@ from app import app, mongo
 from flask import request, redirect, url_for, jsonify
 
 
+
+@app.route('/get_category_id')
+def get_category_id():
+    category_name = request.args.get('name')
+    category = mongo.db.categories.find_one({'name': category_name})
+    if category:
+        return str(category['_id'])
+    else:
+        return None
+
+
+
 @app.route('/')
 def home():
     categories = mongo.db.categories.find()
@@ -111,4 +123,34 @@ def search_suggestions():
     filtered_suggestions = [suggestion for suggestion in suggestions if user_input.lower() in suggestion.lower()]
 
     return jsonify({'suggestions': filtered_suggestions})
+
+
+
+#Add your fucking recipe
+@app.route('/add_recipe', methods=['GET', 'POST'])
+def add_recipe():
+    if request.method == 'POST':
+        name = request.form['name']
+        category_id = request.form['category_id']
+        ingredients = request.form['ingredients'].split('\r\n')
+        instructions = request.form['instructions']
+        description = request.form['description']
+
+        # Validate inputs and insert into MongoDB
+        if not any(char.isdigit() or char in "!@#$%^&" for char in name):
+            mongo.db.recipes.insert_one({
+                'name': name,
+                'category': ObjectId(category_id),  # Convert category_id to ObjectId
+                'description': description,
+                'ingredients': ingredients,
+                'instructions': instructions
+            })
+
+            # Return a JSON response indicating success
+            return redirect(url_for('home'))
+
+    # If the request is not a POST or the validation fails, render the add_recipe template
+    categories = mongo.db.categories.find()
+    return render_template('add_recipe.html', categories=categories)
+
 

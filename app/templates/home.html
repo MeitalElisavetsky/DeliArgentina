@@ -1,6 +1,3 @@
-Certainly! Here's your existing `home.html` file with the added modifications to handle showing and hiding suggestions only when the user clicks on the search bar and starts typing:
-
-```html
 <!-- home.html -->
 <!DOCTYPE html>
 <html lang="en">
@@ -29,6 +26,7 @@ Certainly! Here's your existing `home.html` file with the added modifications to
                 <img src="{{ url_for('static', filename='images/' + category.name.replace(' ', '_').lower() + '.png') }}" alt="{{ category.name }}">
             </a>
             {% endfor %}
+            <a href="{{ url_for('add_recipe') }}" class="add-recipe-button">Add Recipe</a>
         </div>
     </div>
 
@@ -109,6 +107,3 @@ Certainly! Here's your existing `home.html` file with the added modifications to
 </body>
 
 </html>
-```
-
-This modification should address the issue of suggestions appearing only when the user clicks on the search bar and starts typing.
