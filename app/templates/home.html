@@ -20,13 +20,14 @@
             </form>
             <div id="search-suggestions" class="suggestions"></div>
         </div>
+        <a href="{{ url_for('add_recipe') }}" class="add-recipe-button">Add Recipe</a>
+
         <div class="category-container">
             {% for category in categories %}
             <a class="category-button" href="{{ url_for('category', category_name=category.name) }}">
                 <img src="{{ url_for('static', filename='images/' + category.name.replace(' ', '_').lower() + '.png') }}" alt="{{ category.name }}">
             </a>
             {% endfor %}
-            <a href="{{ url_for('add_recipe') }}" class="add-recipe-button">Add Recipe</a>
         </div>
     </div>
 
