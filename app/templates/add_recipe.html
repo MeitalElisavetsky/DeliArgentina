@@ -6,10 +6,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Recipe</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='top_bar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_recipe.css') }}">
 </head>
 
 <body>
+
+    <div class="top-bar">
+        <a href="/">Home</a>
+        <a href="/category/Appetizers">Appetizers</a>
+        <a href="/category/Main Courses">Main Courses</a>
+        <a href="/category/Desserts">Desserts</a>
+        <a href="/category/Holidays">Holidays</a>
+        <a href="/category/Vegetarian">Vegetarian</a>
+        <a href="/add_recipe">Add your recipe</a>
+    </div>
+ 
+
     <div class="container">
         <h1 class="title">Add Recipe</h1>
         <form method="post" action="/add_recipe">
@@ -37,6 +50,9 @@
 
             <button type="submit">Add Recipe</button>
         </form>
+        <div class="thank-you-box">
+            Thank you for adding your recipe! Remember "Primero Argentina, segundo Francia, tercero gracias!"
+        </div>    
     </div>
 </body>
 
