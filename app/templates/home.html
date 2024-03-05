@@ -1,0 +1,114 @@
+Certainly! Here's your existing `home.html` file with the added modifications to handle showing and hiding suggestions only when the user clicks on the search bar and starts typing:
+
+```html
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeliArgentina</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title"><img src="/static/images/logo2.png" alt="DeliArgentina Logo"></h1>
+        <div class="search-bar">
+            <form action="{{ url_for('search') }}" method="get">
+                <input type="text" id="search-input" name="query" placeholder="Search for recipes">
+                <button type="submit">Search</button>
+            </form>
+            <div id="search-suggestions" class="suggestions"></div>
+        </div>
+        <div class="category-container">
+            {% for category in categories %}
+            <a class="category-button" href="{{ url_for('category', category_name=category.name) }}">
+                <img src="{{ url_for('static', filename='images/' + category.name.replace(' ', '_').lower() + '.png') }}" alt="{{ category.name }}">
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Event listener for input focus
+            $('#search-input').on('focus', function () {
+                // Fetch suggestions from the server when the search bar is focused
+                fetchSuggestions();
+            });
+
+            // Event listener for input changes
+            $('#search-input').on('input', function () {
+                // Fetch suggestions from the server as the user types
+                fetchSuggestions();
+            });
+
+            // Event listener for form submission
+            $('.search-bar form').on('submit', function (e) {
+                e.preventDefault();
+                // Perform search based on user input
+                performSearch();
+            });
+
+            // Event listener for suggestion clicks
+            $(document).on('click', '.suggestion', function () {
+                const suggestionText = $(this).text();
+                // Redirect to the recipe page corresponding to the clicked suggestion
+                window.location.href = '/search?query=' + encodeURIComponent(suggestionText);
+            });
+
+            // Event listener for input blur (when the user clicks outside the search bar)
+            $('#search-input').on('blur', function () {
+                // Hide suggestions when the search bar loses focus
+                $('#search-suggestions').hide();
+            });
+        });
+
+        function fetchSuggestions() {
+            // Get the user input
+            const userInput = $('#search-input').val();
+
+            // Make an AJAX request to fetch suggestions
+            $.ajax({
+                url: '/search_suggestions',
+                type: 'POST',
+                data: { input: userInput },
+                success: function (response) {
+                    // Update the suggestions div with the fetched suggestions
+                    const suggestionsDiv = $('#search-suggestions');
+                    suggestionsDiv.html('');
+
+                    if (response.suggestions.length > 0) {
+                        response.suggestions.forEach((suggestion) => {
+                            suggestionsDiv.append(`<div class="suggestion">${suggestion}</div>`);
+                        });
+                        // Show suggestions
+                        suggestionsDiv.show();
+                    } else {
+                        // Hide suggestions if there are no suggestions
+                        suggestionsDiv.hide();
+                    }
+                },
+                error: function (error) {
+                    console.error('Error fetching suggestions:', error);
+                }
+            });
+        }
+
+        function performSearch() {
+            // Get the user input
+            const userInput = $('#search-input').val();
+
+            // Redirect to the search results page
+            window.location.href = '/search?query=' + encodeURIComponent(userInput);
+        }
+    </script>
+</body>
+
+</html>
+```
+
+This modification should address the issue of suggestions appearing only when the user clicks on the search bar and starts typing.
