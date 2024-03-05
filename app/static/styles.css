@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #010142; /* Adjust the background color as needed */
+    background-color: #ffffff; /* Adjust the background color as needed */
 }
 
 .container {
@@ -23,8 +23,8 @@ body {
     font-size: 16px; /* Adjust the font size for smaller buttons */
     padding: 5px; /* Decrease padding for smaller buttons */
     margin: 5px; /* Decrease margin for smaller buttons */
-    background-color: #010142;
-    color: #000000;
+    background-color: #ffffff;
+    color: #ffffff;
     border: none;
     cursor: pointer;
     border-radius: 8px;
@@ -38,8 +38,26 @@ body {
 }
 
 .category-button:hover {
-    background-color: #010142;
+    background-color: #ffffff;
 }
+
+.add-recipe-button {
+    background-color: #4faee2;
+    color: #ffffff;
+    padding: 15px 25px;
+    text-decoration: none;
+    border-radius: 200px;
+    /* Add any other special styles you want */
+
+    /* Center the button horizontally */
+    margin: 3 ;
+
+    /* Set the position relative to the search bar */
+    position: relative;
+    top: 0px; /* Adjust as needed */
+}
+
+
 
 /* New styles for the search bar and search results */
 .search-bar {
@@ -60,8 +78,8 @@ body {
 
 .search-bar button {
     padding: 10px;
-    background-color: #4285f4;
-    color: #fff;
+    background-color: #4faee2;
+    color: #ffffff;
     border: none;
     cursor: pointer;
     border-radius: 8px;
@@ -69,7 +87,7 @@ body {
 }
 
 .search-bar button:hover {
-    background-color: #3367d6;
+    background-color: #ffd200;
 }
 
 .suggestions {
@@ -79,7 +97,7 @@ body {
     max-height: 200px;
     overflow-y: auto;
     background-color: #fff;
-    border: 1px solid #ccc;
+    border: 1px solid #ffd400;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     top: 100%; /* Position suggestions below the search bar */
     left: 50%; /* Center suggestions horizontally */
@@ -95,7 +113,7 @@ body {
 }
 
 .suggestion:hover {
-    background-color: #f0f0f0;
+    background-color: #ffd400;
 }
 
 .no-suggestions {

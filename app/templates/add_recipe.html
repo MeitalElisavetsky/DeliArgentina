@@ -1,0 +1,59 @@
+<!-- add_recipe.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recipe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='top_bar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_recipe.css') }}">
+</head>
+
+<body>
+
+    <div class="top-bar">
+        <a href="/">Home</a>
+        <a href="/category/Appetizers">Appetizers</a>
+        <a href="/category/Main Courses">Main Courses</a>
+        <a href="/category/Desserts">Desserts</a>
+        <a href="/category/Holidays">Holidays</a>
+        <a href="/category/Vegetarian">Vegetarian</a>
+        <a href="/add_recipe">Add your recipe</a>
+    </div>
+ 
+
+    <div class="container">
+        <h1 class="title">Add Recipe</h1>
+        <form method="post" action="/add_recipe">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required pattern="[^0-9!@#$%^&]+" title="No numbers or special characters allowed"><br>
+
+            <!-- Updated category field with manually specified IDs -->
+            <label for="category">Category:</label>
+            <select id="category" name="category_id" required>
+                <option value="65e4ebc6d51a91baa0413c25">Appetizers</option>
+                <option value="65e4ebc6d51a91baa0413c26">Main Courses</option>
+                <option value="65e4ebc6d51a91baa0413c27">Desserts</option>
+                <option value="65e4ebc6d51a91baa0413c28">Holidays</option>
+                <option value="65e4ebc6d51a91baa0413c29">Vegetarian</option>
+            </select><br>
+
+            <label for="ingredients">Ingredients:</label>
+            <textarea id="ingredients" name="ingredients" required placeholder="Ingredient 1&#10;Ingredient 2&#10;..."></textarea><br>
+
+            <label for="instructions">Instructions:</label>
+            <textarea id="instructions" name="instructions" required></textarea><br>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea><br>
+
+            <button type="submit">Add Recipe</button>
+        </form>
+        <div class="thank-you-box">
+            Thank you for adding your recipe! Remember "Primero Argentina, segundo Francia, tercero gracias!"
+        </div>    
+    </div>
+</body>
+
+</html>

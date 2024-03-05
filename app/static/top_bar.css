@@ -1,0 +1,11 @@
+.top-bar {
+    background-color: #0094d7db;
+    padding: 10px;
+    text-align: center;
+}
+
+.top-bar a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
