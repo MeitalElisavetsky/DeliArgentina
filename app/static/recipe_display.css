@@ -52,6 +52,19 @@ li {
     margin-bottom: 8px;
 }
 
+
+a {
+    text-decoration: none;
+    color: #0075bf;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #004080;
+}
+
+
 @media (max-width: 600px) {
     .container {
         padding: 10px;

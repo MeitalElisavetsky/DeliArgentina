@@ -1,0 +1,65 @@
+/* styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center align the content */
+}
+
+.container img.no-results-image {
+    width: 70%; /* Adjust the percentage as needed */
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333;
+    font-size: 24px; /* Adjust the font size as needed */
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 15px; /* Increase the margin */
+    font-size: 18px; /* Adjust the font size as needed */
+}
+
+a {
+    text-decoration: none;
+    color: #0075bf;
+    font-weight: bold;
+    font-size: 18px; /* Adjust the font size as needed */
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #004080;
+}
+
+/* Add Recipe Button */
+.btn {
+    display: inline-block;
+    padding: 15px 30px; /* Adjust padding to make it bigger */
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
