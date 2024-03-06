@@ -12,16 +12,19 @@ body {
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center align the content */
 }
 
 .container img.no-results-image {
-    width: 50%; /* Adjust the percentage as needed */
-    max-width: 100%; /* Ensure the image doesn't exceed its natural size */
-    height: auto; /* Maintain the aspect ratio */
+    width: 70%; /* Adjust the percentage as needed */
+    max-width: 100%;
+    height: auto;
     margin-bottom: 20px;
 }
+
 h2 {
     color: #333;
+    font-size: 24px; /* Adjust the font size as needed */
 }
 
 ul {
@@ -30,13 +33,15 @@ ul {
 }
 
 li {
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* Increase the margin */
+    font-size: 18px; /* Adjust the font size as needed */
 }
 
 a {
     text-decoration: none;
     color: #0075bf;
     font-weight: bold;
+    font-size: 18px; /* Adjust the font size as needed */
     transition: color 0.3s ease;
 }
 
@@ -47,7 +52,7 @@ a:hover {
 /* Add Recipe Button */
 .btn {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 15px 30px; /* Adjust padding to make it bigger */
     background-color: #007bff;
     color: #fff;
     text-decoration: none;

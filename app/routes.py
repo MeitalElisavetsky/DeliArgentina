@@ -102,24 +102,26 @@ def insert_sample_data():
 #Search Bar function
 @app.route('/search', methods=['GET'])
 def search():
-    query = request.args.get('query', '')
+    query = request.args.get('query', '').lower()
 
     if not query.strip():    
         return redirect(url_for('home'))
-    # Customize this part based on your MongoDB setup
-    # You might want to search for recipes based on the recipe name or other criteria
-    # For example, you can use a case-insensitive search on the recipe name
-    recipes_cursor = mongo.db.recipes.find({"name": {"$regex": query, "$options": "i"}})
 
- # Check if any recipes are found
-    recipe_exists = any(recipe["name"].lower() == query.lower() for recipe in recipes_cursor)
+    # Use a case-insensitive regex to find recipes containing the query as a substring
+    regex_pattern = f".*{query}.*"
+    recipes_cursor = mongo.db.recipes.find({"name": {"$regex": regex_pattern, "$options": "i"}})
+
+    # Check if any recipes are found
+    matching_recipes = [recipe for recipe in recipes_cursor if query in recipe["name"].lower()]
+    recipe_count = len(matching_recipes)
 
     # If no recipe with the specified name is found, display the "no_results" template
-    if not recipe_exists:
+    if recipe_count == 0:
         return render_template('no_results.html', query=query)
 
     # If at least one recipe is found, render the search results template
-    return render_template('search_results.html', query=query, recipes=recipes_cursor)
+    return render_template('search_results.html', query=query, recipes=matching_recipes)
+
 
 
 # Updated route for handling search suggestions

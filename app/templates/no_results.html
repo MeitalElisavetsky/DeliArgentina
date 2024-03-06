@@ -18,12 +18,12 @@
         <a href="/category/Vegetarian">Vegetarian</a>
         <a href="/add_recipe">Add your recipe</a>
     </div>
-    
+
     <div class="container">
-        <img src="/static/images/sadface.png" alt="No Results Image">
         <h2>Sorry, we couldn't find what you are trying to cook.</h2>
         <p>Would you like to add your own recipe?</p>
         <a href="{{ url_for('add_recipe') }}" class="btn btn-primary">Add Recipe</a>
+        <img src="/static/images/sadface.png" alt="No Results Image">
     </div>
 </body>
 </html>
