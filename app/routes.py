@@ -1,8 +1,8 @@
 # Import necessary libraries
-from flask import render_template
+from flask import render_template, request, redirect, url_for, jsonify
 from bson import ObjectId  # Import ObjectId for creating MongoDB ObjectId
 from app import app, mongo
-from flask import request, redirect, url_for, jsonify
+from db.db import initialize_database
 
 
 
