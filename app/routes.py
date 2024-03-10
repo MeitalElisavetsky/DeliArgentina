@@ -2,7 +2,6 @@
 from flask import render_template, request, redirect, url_for, jsonify
 from bson import ObjectId  # Import ObjectId for creating MongoDB ObjectId
 from app import app, mongo
-from db.db import initialize_database
 
 
 
