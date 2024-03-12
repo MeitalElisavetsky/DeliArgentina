@@ -76,19 +76,9 @@ pipeline {
     }
 
     post {
-        failure {
-            script {
-                // Email notification for failed builds
-                emailext body: 'Failed build: ${BUILD_URL}', 
-                          subject: "Failed Build - ${JOB_NAME} #${BUILD_NUMBER}", 
-                          to: "${DEVELOPER_EMAIL}"
+        always {
+            cleanWS() 
             }
         }
 
-        success {
-            script {
-                echo "Build succeeded. No email notification needed."
-            }
-        }
-    }
 }
