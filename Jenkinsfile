@@ -15,12 +15,8 @@ pipeline {
         DEVELOPER_EMAIL = "meital.2012@hotmail.com"
         GITLAB_TOKEN = credentials('meital-gitlab-cred') // Reference the GitLab token credential ID
         DOCKERHUB_TOKEN = credentials('meital-docker-cred') // Reference the Docker Hub token credential ID
-        PROJECT_MANAGERS_EMAIL = "project-managers@example.com"
     }
 
-    triggers {
-        gitlab(triggerOnPush: true, triggerOnMergeRequest: true, branchFilterType: 'RegexFilter', branchFilter: '^feature/.*$')
-    }
 
     stages {
         stage('Checkout') {
