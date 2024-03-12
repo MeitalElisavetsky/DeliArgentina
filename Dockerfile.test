@@ -1,0 +1,17 @@
+# Use a base image with Python and other necessary dependencies
+FROM python:3.8-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the entire application directory
+COPY . /app
+
+# Set the working directory to the tests folder
+WORKDIR /app/tests
+
+# Install dependencies
+RUN pip install -r /app/requirements.txt
+
+# Specify the command to run when the container starts (for running tests)
+CMD ["pytest"]
