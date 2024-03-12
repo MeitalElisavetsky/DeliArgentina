@@ -17,7 +17,6 @@ pipeline {
         DOCKERHUB_TOKEN = credentials('meital-docker-cred') // Reference the Docker Hub token credential ID
     }
 
-
     stages {
         stage('Checkout') {
             steps {
@@ -82,7 +81,7 @@ pipeline {
                 // Email notification for failed builds
                 emailext body: 'Failed build: ${BUILD_URL}', 
                           subject: "Failed Build - ${JOB_NAME} #${BUILD_NUMBER}", 
-                          to: "${PROJECT_MANAGERS_EMAIL} ${DEVELOPER_EMAIL}"
+                          to: "${DEVELOPER_EMAIL}"
             }
         }
 
