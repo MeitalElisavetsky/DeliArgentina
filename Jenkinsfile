@@ -57,15 +57,14 @@ pipeline {
             }
         }
 
+
         stage('Package Helm Chart') {
             when {
                 branch 'main'
             }
             steps {
                 script {
-                    docker.withTool('helm') {
-                        sh "helm package meitalchart"
-                    }
+                    sh "helm package meitalchart"
                     withCredentials([string(credentialsId: 'meital-gitlab-api', variable: 'GITLAB_API_TOKEN')]) {
                         sh """
                         curl --request POST \
@@ -77,9 +76,6 @@ pipeline {
                 }
             }
         }
-
-
-
 
 
         stage('Create Merge Request') {
