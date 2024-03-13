@@ -71,10 +71,10 @@ pipeline {
                     def helmChartPackage = sh(script: "ls -1 meitalchart-*.tgz", returnStdout: true).trim()
                     
                     // Create a folder named 'helm-packages' if it doesn't exist
-                    sh "mkdir -p helm-packages"
+                    sh "mkdir -p uploads"
                     
                     // Move the Helm chart package to the 'helm-packages' folder
-                    sh "mv ${helmChartPackage} helm-packages/"
+                    sh "mv ${helmChartPackage} uploads/"
                     
                     // Upload the Helm chart package to GitLab
                     withCredentials([string(credentialsId: 'meital-gitlab-api', variable: 'GITLAB_API_TOKEN')]) {
@@ -88,6 +88,7 @@ pipeline {
                 }
             }
         }
+
 
 
 
