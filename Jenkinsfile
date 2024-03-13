@@ -58,7 +58,7 @@ pipeline {
         }
 
 
-        stages {
+        stage {
             stage('Build Helm Chart') {
                 steps {
                     sh 'helm lint $HELM_CHART_NAME'
