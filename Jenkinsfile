@@ -64,18 +64,25 @@ pipeline {
             }
             steps {
                 script {
+                    // Package the Helm chart
                     sh "helm package meitalchart"
+                    
+                    // Get the name of the Helm chart package file
+                    def helmChartPackage = sh(script: "ls -1 meitalchart-*.tgz", returnStdout: true).trim()
+                    
+                    // Upload the Helm chart package to GitLab
                     withCredentials([string(credentialsId: 'meital-gitlab-api', variable: 'GITLAB_API_TOKEN')]) {
                         sh """
                         curl --request POST \
                         --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" \
-                        --form "file=@temp/meitalchart*.tgz" \
+                        --form "file=@${helmChartPackage}" \
                         "${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/uploads"
                         """
                     }
                 }
             }
         }
+
 
 
         stage('Create Merge Request') {
