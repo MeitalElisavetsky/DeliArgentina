@@ -82,12 +82,13 @@ pipeline {
                         curl --request POST \
                         --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" \
                         --form "file=@helm-packages/${helmChartPackage}" \
-                        "${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/uploads"
+                        "${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/uploads?path=uploads"
                         """
                     }
                 }
             }
         }
+
 
 
 
