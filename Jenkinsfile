@@ -58,14 +58,17 @@ pipeline {
         }
 
 
-        stage {
-            stage('Build Helm Chart') {
-                steps {
-                    sh 'helm lint $HELM_CHART_NAME'
-                    sh 'helm package $HELM_CHART_NAME'
+        stage('Build Helm Chart') {
+            steps {
+                script {
+                    sh "helm lint ${HELM_CHART_NAME}"
+                    sh "helm package ${HELM_CHART_NAME}"
                 }
             }
         }
+
+
+        
 
         stage('Push Helm Package to DockerHub') {
             when {
