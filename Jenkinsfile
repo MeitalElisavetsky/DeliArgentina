@@ -11,7 +11,7 @@ pipeline {
     environment {
         APP_NAME = "deli-argentina"
         DOCKER_IMAGE = "meitalle/deli-argentina-img" // Docker Hub registry
-        HELM_CHART_PATH = "meitalchart/"
+        HELM_CHART_NAME = "meitalchart"
         GITLAB_TOKEN = credentials('meital-gitlab-cred') // Reference the GitLab token credential ID
         DOCKERHUB_TOKEN = credentials('meital-docker-cred') // Reference the Docker Hub token credential ID
         PROJECT_ID = '55457838'
@@ -58,37 +58,28 @@ pipeline {
         }
 
 
-        stage('Package Helm Chart') {
+        stages {
+            stage('Build Helm Chart') {
+                steps {
+                    sh 'helm lint $HELM_CHART_NAME'
+                    sh 'helm package $HELM_CHART_NAME'
+                }
+            }
+        }
+
+        stage('Push Helm Package to DockerHub') {
             when {
                 branch 'main'
             }
             steps {
                 script {
-                    // Package the Helm chart
-                    sh "helm package meitalchart"
-                    
-                    // Get the name of the Helm chart package file
-                    def helmChartPackage = sh(script: "ls -1 meitalchart-*.tgz", returnStdout: true).trim()
-                    
-                    // Create a folder named 'helm-packages' if it doesn't exist
-                    sh "mkdir -p uploads"
-                    
-                    // Move the Helm chart package to the 'helm-packages' folder
-                    sh "mv ${helmChartPackage} uploads/"
-                    
-                    // Upload the Helm chart package to GitLab
-                    withCredentials([string(credentialsId: 'meital-gitlab-api', variable: 'GITLAB_API_TOKEN')]) {
-                        sh """
-                        curl --request POST \
-                        --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" \
-                        --form "file=@uploads/${helmChartPackage}" \
-                        "${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/uploads"
-                        """
+                    withCredentials([string(credentialsId: 'meital-docker-cred', variable: 'DOCKERHUB_TOKEN')]) {
+                        // Push the Helm chart to DockerHub
+                        sh "helm push $HELM_CHART_NAME*.tgz oci://index.docker.io/meitalle"
                     }
                 }
             }
         }
-
 
 
 
