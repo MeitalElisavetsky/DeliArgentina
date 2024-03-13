@@ -44,14 +44,43 @@ pipeline {
             }
         }
 
-        stage('Build Helm Package') {
+        stage ('Push Docker image') {
+            when {
+                branch 'main'
+            }
             steps {
                 script {
-                    // Package Helm chart for feature branches
-                    sh "helm package --version ${BRANCH_NAME} ${HELM_CHART_PATH} -d ${WORKSPACE}/artifacts"
+                    docker.withRegistry('https://registry.hub.docker.com', 'meital-dockerhub-cred' ) {
+                        dockerImage.push("latest")
+                    }
                 }
             }
         }
+
+        stage('Package Helm Chart') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    docker.withTool('helm') {
+                        sh "helm package meitalchart"
+                    }
+                    withCredentials([string(credentialsId: 'meital-gitlab-api', variable: 'GITLAB_API_TOKEN')]) {
+                        sh """
+                        curl --request POST \
+                        --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" \
+                        --form "file=@temp/meitalchart*.tgz" \
+                        "${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/uploads"
+                        """
+                    }
+                }
+            }
+        }
+
+
+
+
 
         stage('Create Merge Request') {
             when {
