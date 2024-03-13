@@ -10,11 +10,12 @@ pipeline {
 
     environment {
         APP_NAME = "deli-argentina"
-        DOCKER_REGISTRY = "meitalle/deli-argentina-img" // Docker Hub registry
-        HELM_CHART_PATH = "charts/deli-argentina"
-        DEVELOPER_EMAIL = "meital.2012@hotmail.com"
+        DOCKER_IMAGE = "meitalle/deli-argentina-img" // Docker Hub registry
+        HELM_CHART_PATH = "meitalchart/"
         GITLAB_TOKEN = credentials('meital-gitlab-cred') // Reference the GitLab token credential ID
         DOCKERHUB_TOKEN = credentials('meital-docker-cred') // Reference the Docker Hub token credential ID
+        PROJECT_ID = '55457838'
+        GITLAB_URL = 'https://gitlab.com'
     }
 
     stages {
@@ -28,7 +29,7 @@ pipeline {
             steps {
                 script {
                     // Build and tag Docker image for feature branches
-                    docker.build("${DOCKER_REGISTRY}/${APP_NAME}:${BRANCH_NAME}")
+                    dockerImage = docker.build("${DOCKER_IMAGE}:latest", "--no-cache .")
                 }
             }
         }
@@ -53,22 +54,29 @@ pipeline {
         }
 
         stage('Create Merge Request') {
+            when {
+                not {
+                    branch 'main'
+                }
+            }
             steps {
                 script {
-                    // Use GitLab API to create a merge request
-                    def apiUrl = "${GITLAB_API_URL}/projects/your-project-id/merge_requests"
-                    def response = sh(script: """
-                        curl --request POST \
-                             --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-                             --header "Content-Type: application/json" \
-                             --data '{"source_branch": "${BRANCH_NAME}", "target_branch": "main", "title": "Merge Request for ${BRANCH_NAME}"}' \
-                             ${apiUrl}
-                    """, returnStatus: true, returnStdout: true)
-
-                    if (response != 201) {
-                        error "Failed to create merge request. HTTP Status: ${response}"
-                    } else {
-                        echo "Merge request created successfully."
+                    withCredentials([string(credentialsId: 'meital-gitlab-api', variable: 'GITLAB_API_TOKEN')]) {
+                        def response = sh(script: """
+                        curl -s -o response.json -w "%{http_code}" --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" -X POST "${GITLAB_URL}/api/v4/projects/${PROJECT_ID}/merge_requests" \
+                        --form "source_branch=${env.BRANCH_NAME}" \
+                        --form "target_branch=main" \
+                        --form "title=MR from ${env.BRANCH_NAME} into main" \
+                        --form "remove_source_branch=false"
+                        """, returnStdout: true).trim()
+                        if (response.startsWith("20")) {
+                            echo "Merge request created successfully."
+                        } else {
+                            echo "Failed to create merge request. Response Code: ${response}"
+                            def jsonResponse = readJSON file: 'response.json'
+                            echo "Error message: ${jsonResponse.message}"
+                            error "Merge request creation failed."
+                        }
                     }
                 }
             }
@@ -77,8 +85,8 @@ pipeline {
 
     post {
         always {
-            cleanWS() 
-            }
+            cleanWs()
         }
-
+    }
 }
+
