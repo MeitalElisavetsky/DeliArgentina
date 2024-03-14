@@ -2,21 +2,12 @@ import pytest
 from flask import url_for
 from app import app, mongo
 from pymongo import MongoClient
-import os
-
-@pytest.fixture(scope='module')
-def mongodb():
-    test_mongodb_uri = os.getenv('TEST_MONGODB_URI', 'mongodb://mongodb:27017/test_deli_argentina_db')
-    client = MongoClient(test_mongodb_uri, serverSelectionTimeoutMS=5000)
-    test_db = client["test_deli_argentina_db"]
-    yield test_db
-    client.drop_database("test_deli_argentina_db")
 
 
 @pytest.fixture
-def client(mongodb):
+def client():
     app.config['TESTING'] = True
-    app.config['MONGO_URI'] = 'mongodb://mongodb:27017/test_deli_argentina_db'
+    client = app.test_client()
 
     # Setup: Insert some sample data into the test database
     mongo.db.categories.insert_one({'name': 'Test Category'})

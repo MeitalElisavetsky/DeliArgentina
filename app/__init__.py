@@ -2,11 +2,17 @@ from flask import Flask
 from flask_pymongo import PyMongo
 from bson import ObjectId
 from pymongo import MongoClient
-from pymongo import MongoClient
+import os
 
 app = Flask(__name__, static_url_path='/static')
 
-app.config['MONGO_URI'] = "mongodb://root:ZTRW3W0ToK@mongodb:27017/deli_argentina_db"
+#app.config['MONGO_URI'] = "mongodb://root:ZTRW3W0ToK@mongodb:27017/deli_argentina_db"
+mongodb_uri = os.getenv('MONGO_URI', 'mongodb://root:ZTRW3W0ToK@mongodb:27017/')
+
+client = MongoClient(mongodb_uri)
+
+db = client['deli_argentina_db']
+
 
 mongo = PyMongo(app)
 
