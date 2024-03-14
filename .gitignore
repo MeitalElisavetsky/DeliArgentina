@@ -1,0 +1,7 @@
+# Ignore specific directories
+tools/
+venv/
+
+# Ignore specific files
+mongodb-0.1.0.tgz
+expense-tracker-app-0.1.0.tgz
