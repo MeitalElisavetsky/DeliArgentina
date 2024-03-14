@@ -6,7 +6,7 @@ metadata:
 spec:
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: dev
+    namespace: default
   source:
     repoURL: 'https://gitlab.com/sela-tracks/1101/meital/final-project/application/application.git'
     path: ./meitalchart
@@ -47,7 +47,7 @@ spec:
           value: 8Gi
   destination:
     server: https://kubernetes.default.svc
-    namespace: dev
+    namespace: default
   syncPolicy:
     automated:
       selfHeal: true
