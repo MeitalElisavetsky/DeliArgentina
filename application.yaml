@@ -42,7 +42,7 @@ spec:
     helm:
       parameters:
         - name: auth.rootPassword
-          value: your-root-password
+          value: ""  # Disable authentication
         - name: architecture
           value: "standalone"
         - name: persistence.enabled
@@ -56,3 +56,4 @@ spec:
     automated:
       selfHeal: true
       prune: true
+
