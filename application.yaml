@@ -41,13 +41,17 @@ spec:
     targetRevision: "14.12.3"
     helm:
       parameters:
+        - name: auth.rootPassword
+          value: your-root-password
+        - name: architecture
+          value: "standalone"
         - name: persistence.enabled
           value: "true"
         - name: persistence.size
           value: 8Gi
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: dev
   syncPolicy:
     automated:
       selfHeal: true
