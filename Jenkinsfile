@@ -58,31 +58,6 @@ pipeline {
         }
 
 
-        stage('Build Helm Chart') {
-            steps {
-                script {
-                    sh "helm lint ${HELM_CHART_NAME}"
-                    sh "helm package ${HELM_CHART_NAME}"
-                }
-            }
-        }
-
-
-        
-
-        stage('Push Helm Package to DockerHub') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    withCredentials([string(credentialsId: 'meital-docker-cred', variable: 'DOCKERHUB_TOKEN')]) {
-                        // Push the Helm chart to DockerHub
-                        sh "helm push $HELM_CHART_NAME*.tgz oci://index.docker.io/meitalle"
-                    }
-                }
-            }
-        }
 
 
 
@@ -117,6 +92,11 @@ pipeline {
     }
 
     post {
+        failure {
+            emailext body: 'The build failed. Please check the build logs for details.',
+                     subject: "Build failed: ${currentBuild.fullDisplayName}",
+                     to: 'example@outlook.com'
+        }
         always {
             cleanWs()
         }
