@@ -7,11 +7,8 @@ WORKDIR /app
 # Copy the entire application directory
 COPY . /app
 
-# Set the working directory to the tests folder
-WORKDIR /app/tests
-
 # Install dependencies
-RUN pip install -r /app/requirements.txt
+RUN pip install -r requirements.txt
 
 # Specify the command to run when the container starts (for running tests)
 CMD ["pytest"]
