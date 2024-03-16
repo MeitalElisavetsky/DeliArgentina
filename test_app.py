@@ -15,7 +15,9 @@ def test_app():
 def test_db():
     # Create a separate testing database
     mongodb_uri = os.getenv('MONGO_URI', 'mongodb://mongodb@mongodb:27017/')
+
     client = MongoClient(mongodb_uri)
+
     test_db = client['test_deli_argentina_db']
     
     # Use the testing database for the tests
@@ -76,7 +78,7 @@ def test_add_recipe(test_app, test_db):
     assert new_recipe is not None
 
     # Teardown: Remove the test recipe from the database
-    db.recipes.delete_many({'name': 'New Recipe'})
+    db.recipes.delete_many({'name': 'Test Recipe'})
 
 
 def test_invalid_recipe_name(test_app):
