@@ -1,22 +1,26 @@
-from flask import Flask
-from flask_pymongo import PyMongo
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from bson import ObjectId
 from pymongo import MongoClient
 import os
+from db import *
 
-app = Flask(__name__, static_url_path='/static')
 
-#app.config['MONGO_URI'] = "mongodb://root:ZTRW3W0ToK@mongodb:27017/deli_argentina_db"
-mongodb_uri = os.getenv('MONGO_URI', 'mongodb://root:ZTRW3W0ToK@mongodb:27017/')
+app = Flask(__name__)
+
+# Connect to MongoDB
+mongodb_uri = os.getenv('MONGO_URI', 'mongodb://mongodb@mongodb:27017/')
 
 client = MongoClient(mongodb_uri)
 
 db = client['deli_argentina_db']
 
+categories = db['categories']
 
-mongo = PyMongo(app)
+recipes = db['recipes']
 
-def initialize_database():
+
+#Add sample data
+if categories.count_documents({}) == 0:
     # Categories
     categories = [
         {"name": "Appetizers", "_id": ObjectId("65e4ebc6d51a91baa0413c25")},
@@ -26,7 +30,10 @@ def initialize_database():
         {"name": "Vegetarian", "_id": ObjectId("65e4ebc6d51a91baa0413c29")}
     ]
 
+    insert_categories = db.categories.insert_many(categories)
+
     # Recipes
+if recipes.count_documents({}) == 0:
     recipes = [
         {
             "_id": ObjectId("65e4ed7ed51a91baa0413c2b"),
@@ -106,18 +113,87 @@ def initialize_database():
         }
     ]
 
-    # Check if categories and recipes exist, create them if not
-    for category in categories:
-        existing_category = mongo.db.categories.find_one({"name": category["name"]})
-        if not existing_category:
-            mongo.db.categories.insert_one(category)
+    insert_recipes = db.recipes.insert_many(recipes)
 
-    for recipe in recipes:
-        existing_recipe = mongo.db.recipes.find_one({"name": recipe["name"]})
-        if not existing_recipe:
-            mongo.db.recipes.insert_one(recipe)
+# Home page
+@app.route('/')
+def home():
+    categories = db.categories.find()
+    return render_template('home.html', categories=categories)
 
-# Initialize the database when the application starts
-initialize_database()
+# Displaying recipes
+@app.route('/recipe/<recipe_id>')
+def recipe(recipe_id):
+    # Call the function from db.py to get recipe details
+    recipe = get_recipe_by_id(recipe_id)
 
-from app import routes
+    return render_template('recipe.html', recipe=recipe)
+
+
+# Display categories
+@app.route('/category/<category_name>')
+def category(category_name):
+    # Call the function from db.py to get category and recipes
+    category, recipes = get_category_and_recipes(category_name)
+
+    if category:
+        return render_template('category.html', category_name=category_name, recipes=recipes)
+    else:
+        return "Category not found"
+
+
+#Search Bar function
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('query', '').lower()
+
+    if not query.strip():
+        return redirect(url_for('home'))
+
+    # Call the function from db.py to search for recipes
+    matching_recipes = search_recipes(query)
+
+    if not matching_recipes:
+        return render_template('no_results.html', query=query)
+    else:
+        return render_template('search_results.html', query=query, recipes=matching_recipes)
+
+# Route for providing search suggestions
+@app.route('/search_suggestions', methods=['POST'])
+def search_suggestions():
+    user_input = request.form.get('input', '')
+
+    # Call the function from db.py to get recipe names
+    recipe_names = get_recipe_names()
+
+    # Filter suggestions based on user input
+    filtered_suggestions = [suggestion for suggestion in recipe_names if user_input.lower() in suggestion.lower()]
+
+    return jsonify({'suggestions': filtered_suggestions})
+
+#Add your recipe
+@app.route('/add_recipe', methods=['GET', 'POST'])
+def add_recipe():
+    if request.method == 'POST':
+        name = request.form['name']
+        category_id = request.form['category_id']
+        ingredients = request.form['ingredients'].split('\r\n')
+        instructions = request.form['instructions']
+        description = request.form['description']
+
+        # Call the function from db.py to add the recipe
+        success, message = db_add_recipe(name, category_id, description, ingredients, instructions)
+
+        if success:
+            return redirect(url_for('home'))
+        else:
+            return render_template('add_recipe.html', error=message)
+
+    # If the request is not a POST, render the add_recipe template
+    categories = db.categories.find()
+    return render_template('add_recipe.html', categories=categories)
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5001)
+
