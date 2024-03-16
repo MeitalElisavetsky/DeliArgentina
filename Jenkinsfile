@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker-compose -f docker-compose.yaml up -d'
-                    sh 'docker-compose -f docker-compose.yaml run tests'
+                    sh 'docker-compose -f docker-compose.yaml run test'
                     sh 'docker-compose -f docker-compose.yaml down'
                 }
             }
@@ -95,7 +95,7 @@ pipeline {
         failure {
             emailext body: 'The build failed. Please check the build logs for details.',
                      subject: "Build failed: ${currentBuild.fullDisplayName}",
-                     to: 'example@outlook.com'
+                     to: 'meital.2012@hotmail.com'
         }
         always {
             cleanWs()
