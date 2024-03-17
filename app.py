@@ -8,7 +8,7 @@ from db import *
 app = Flask(__name__)
 
 # Connect to MongoDB
-mongodb_uri = os.getenv('MONGO_URI', 'mongodb://mongodb@mongodb:27017/')
+mongodb_uri = os.getenv('MONGO_URI', 'mongodb://root:root@mongodb:27017/')
 
 client = MongoClient(mongodb_uri)
 
