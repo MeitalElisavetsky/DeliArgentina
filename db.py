@@ -1,6 +1,8 @@
 from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 from flask import request
 from bson import ObjectId
+import bcrypt
 import os
 
 # Connect to MongoDB
@@ -14,6 +16,27 @@ categories = db['categories']
 
 recipes = db['recipes']
 
+users = db['users']
+
+
+
+
+users.create_index([('username', 1)], unique=True)
+
+
+# Function to add a new user with hashed password
+def add_user(username, password):
+    user_data = {'username': username, 'password': password}
+    try:
+        users.insert_one(user_data)
+        return True  # Return True if user is added successfully
+    except DuplicateKeyError:
+        # Handle exception if username is not unique
+        return False
+
+# Function to retrieve a user by username
+def get_user_by_username(username):
+    return users.find_one({'username': username}, {'password': 1})
 
 
 def get_category_id():

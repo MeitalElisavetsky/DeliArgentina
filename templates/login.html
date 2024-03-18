@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/top_bar.css">
+    <link rel="stylesheet" href="/static/login.css">
+</head>
+<body>
+    <div class="top-bar">
+        <a href="/">Home</a>
+        <a href="/category/Appetizers">Appetizers</a>
+        <a href="/category/Main Courses">Main Courses</a>
+        <a href="/category/Desserts">Desserts</a>
+        <a href="/category/Holidays">Holidays</a>
+        <a href="/category/Vegetarian">Vegetarian</a>
+        <a href="/add_recipe">Add your recipe</a>
+    </div>
+    <div class="background"></div>
+    <div class="card">
+        <img class="logo" src="/static/images/usericon.png">
+        <form class="form" method="post">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+
+        <footer>
+            No account?
+            <a href="/signup">Sign Up!</a>
+        </footer>
+    </div>
+</body>
+</html>

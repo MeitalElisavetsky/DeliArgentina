@@ -1,11 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
 from bson import ObjectId
 from pymongo import MongoClient
 import os
+import bcrypt
 from db import *
 
 
 app = Flask(__name__)
+
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 # Connect to MongoDB
 mongodb_uri = os.getenv('MONGO_URI', 'mongodb://root:root@mongodb:27017/')
@@ -17,6 +20,8 @@ db = client['deli_argentina_db']
 categories = db['categories']
 
 recipes = db['recipes']
+
+users = db['users']
 
 
 #Add sample data
@@ -115,11 +120,65 @@ if recipes.count_documents({}) == 0:
 
     insert_recipes = db.recipes.insert_many(recipes)
 
+#Sign up route
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # This function will check if the user exists in the database
+        if get_user_by_username(username):
+            return render_template('signup.html', error='Username already exists')
+        
+        # Hash the password
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        user_data = {'username': username, 'password': hashed_password}
+
+        try:
+            db.users.insert_one(user_data)
+            return redirect(url_for('login'))
+        except Exception as e:
+            print(e)
+            return render_template('signup.html', error='Error creating user')
+    return render_template('signup.html')
+
+
+#Login route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        user = get_user_by_username(username)
+
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
+            session['username'] = username
+            return redirect(url_for('home'))
+        else:
+            return render_template('login.html', error='Invalid username or password')
+
+    return render_template('login.html')  # This line is now correctly indented
+
+    
+#User Logout
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('home'))
+
+
 # Home page
 @app.route('/')
 def home():
     categories = db.categories.find()
-    return render_template('home.html', categories=categories)
+    if 'username' in session:
+        return render_template('home.html', categories=categories)
+    else:
+        return render_template('home.html', categories=categories, show_login=True)  # Render the login option
+
+
 
 # Displaying recipes
 @app.route('/recipe/<recipe_id>')
@@ -174,6 +233,10 @@ def search_suggestions():
 #Add your recipe
 @app.route('/add_recipe', methods=['GET', 'POST'])
 def add_recipe():
+    if 'username' not in session:
+        flash('You need to sign in first to add a recipe.')
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         name = request.form['name']
         category_id = request.form['category_id']

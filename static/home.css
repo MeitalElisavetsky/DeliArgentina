@@ -1,8 +1,8 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #ffffff; /* Adjust the background color as needed */
+    font-family: "Euclid Circular A", "Poppins";
+    background-color: #eff9ff; /* Adjust the background color as needed */
 }
 
 .container {
@@ -23,8 +23,8 @@ body {
     font-size: 16px; /* Adjust the font size for smaller buttons */
     padding: 5px; /* Decrease padding for smaller buttons */
     margin: 5px; /* Decrease margin for smaller buttons */
-    background-color: #ffffff;
-    color: #ffffff;
+    background-color: #eff9ff;
+    color: #eff9ff;
     border: none;
     cursor: pointer;
     border-radius: 8px;
@@ -34,14 +34,11 @@ body {
     align-items: center;
     justify-content: center;
     width: 80px; /* Set a smaller fixed width for buttons */
-    height: px; /* Set a smaller fixed height for buttons */
+    /*height: px; /* Set a smaller fixed height for buttons */
 }
 
-.category-button:hover {
-    background-color: #ffffff;
-}
-
-.add-recipe-button {
+.add-recipe-button,
+.auth-button {
     background-color: #4faee2;
     color: #ffffff;
     padding: 15px 25px;
@@ -50,14 +47,35 @@ body {
     /* Add any other special styles you want */
 
     /* Center the button horizontally */
-    margin: 3 ;
+    margin: 5px;
 
     /* Set the position relative to the search bar */
     position: relative;
     top: 0px; /* Adjust as needed */
 }
 
+.auth-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; /* Add some margin for better spacing */
+}
 
+.auth-options form {
+    margin-left: 10px; /* Add some spacing between the buttons */
+}
+
+/* Remove border around logout button */
+.auth-options form button.add-recipe-button {
+    border: none;
+    font-size: 16px; /* Match the font size of add recipe button */
+    padding: 15px 25px; /* Match the padding of add recipe button */
+}
+
+.auth-button:hover,
+.add-recipe-button:hover {
+    background-color: #ffd200;
+}
 
 /* New styles for the search bar and search results */
 .search-bar {
@@ -119,4 +137,32 @@ body {
 .no-suggestions {
     color: #777;
     text-align: center;
+}
+
+/* Background with dots */
+.background {
+    position: fixed;
+    top: -50vmin;
+    left: -50vmin;
+    width: 100vmin;
+    height: 100vmin;
+    border-radius: 47% 53% 61% 39% / 45% 51% 49% 55%;
+    background: #65c8ff;
+}
+
+.background::after {
+    content: "";
+    position: inherit;
+    right: -50vmin;
+    bottom: -55vmin;
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    background: #FFC107;
+}
+
+.add-recipe-button,
+.auth-button,
+.search-bar button {
+    font-family: "Euclid Circular A", "Poppins";
 }
