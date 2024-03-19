@@ -1,0 +1,65 @@
+additionalPrometheusRulesMap:
+  rule-name:
+    groups:
+    - name: application
+      rules:
+      - alert: LowRunningPodsCount
+        expr: count(kube_pod_status_phase{namespace="dev", pod=~"deli-argentina-meitalchart.*", phase="Running"}) < 3
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Low number of running pods"
+          description: "The count of running pods matching 'deli-argentina-meitalchart*' in namespace 'dev' is below 3."
+      - alert: HighCpuUsage
+        expr: sum(rate(container_cpu_usage_seconds_total{namespace="dev", container!="", pod=~"deli-argentina-meitalchart.*"}[5m])) by (pod) / sum(kube_pod_container_resource_limits_cpu_cores{namespace="dev", container!="", pod=~"deli-argentina-meitalchart.*"}) by (pod) > 0.2
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage for one or more pods matching 'deli-argentina-meitalchart*' in namespace 'dev' is above 80% of its limit."
+      - alert: HighMemoryUsage
+        expr: sum(rate(container_memory_usage_bytes{namespace="dev", container!="", pod=~"deli-argentina-meitalchart.*"}[5m])) by (pod) / sum(kube_pod_container_resource_limits_memory_bytes{namespace="dev", container!="", pod=~"deli-argentina-meitalchart.*"}) by (pod) > 0.8
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage for one or more pods matching 'deli-argentina-meitalchart*' in namespace 'dev' is above 80% of its limit."
+      - alert: HighDiskUsage
+        expr: sum(rate(container_fs_usage_bytes{namespace="dev", container!="", pod=~"deli-argentina-meitalchart.*"}[5m])) / sum(container_fs_limit_bytes{namespace="dev", container!="", pod=~"deli-argentina-meitalchart.*"}) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High disk usage detected"
+          description: "Disk usage for one or more pods of deli-argentina-meitalchart application is above 80% of its limit."
+
+      - alert: PodCrashLoop
+        expr: changes(kube_pod_container_status_restarts_total{namespace="dev", pod=~"deli-argentina-meitalchart.*"}[5m]) > 3
+        for: 5m
+        labels:
+            severity: critical
+        annotations:
+          summary: "Pods are stuck in crash loop"
+          description: "One or more pods of deli-argentina-meitalchart application are stuck in a crash loop, restarting more than 3 times in the last 5 minutes."
+
+      - alert: LowPodsAvailable
+        expr: kube_deployment_status_replicas_available{namespace="dev", deployment=~"deli-argentina-meitalchart.*"} < kube_deployment_status_replicas_desired{namespace="dev", deployment=~"deli-argentina-meitalchart.*"}
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low pods available"
+          description: "The number of available pods for deli-argentina-meitalchart application is less than desired replicas."
+
+      - alert: HighPodRestartRate
+        expr: rate(kube_pod_container_status_restarts_total{namespace="dev", pod=~"deli-argentina-meitalchart.*"}[5m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High pod restart rate detected"
+          description: "The rate of pod restarts for deli-argentina-meitalchart application is above 1 per minute in the last 5 minutes."
+
