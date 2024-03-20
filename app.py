@@ -217,18 +217,6 @@ def search():
     else:
         return render_template('search_results.html', query=query, recipes=matching_recipes)
 
-# Route for providing search suggestions
-@app.route('/search_suggestions', methods=['POST'])
-def search_suggestions():
-    user_input = request.form.get('input', '')
-
-    # Call the function from db.py to get recipe names
-    recipe_names = get_recipe_names()
-
-    # Filter suggestions based on user input
-    filtered_suggestions = [suggestion for suggestion in recipe_names if user_input.lower() in suggestion.lower()]
-
-    return jsonify({'suggestions': filtered_suggestions})
 
 #Add your recipe
 @app.route('/add_recipe', methods=['GET', 'POST'])
