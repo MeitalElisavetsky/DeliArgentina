@@ -13,8 +13,8 @@ services:
     image: mongo:latest
     ports:
       - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
+    #volumes:
+      #- mongodb_data:/data/db
 
   test:
     build:
@@ -25,5 +25,5 @@ services:
     depends_on:
       - mongodb
 
-volumes:
-   mongodb_data:
+#volumes:
+   #mongodb_data:
