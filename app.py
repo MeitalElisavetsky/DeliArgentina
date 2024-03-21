@@ -121,7 +121,7 @@ if recipes.count_documents({}) == 0:
     insert_recipes = db.recipes.insert_many(recipes)
 
 #Sign up route
-@app.route('/signup', methods=['GET', 'POST'])
+#@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -170,7 +170,7 @@ def logout():
 
 
 # Home page
-#@app.route('/')
+@app.route('/')
 def home():
     categories = db.categories.find()
     if 'username' in session:
