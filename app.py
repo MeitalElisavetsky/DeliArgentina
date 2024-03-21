@@ -37,7 +37,7 @@ if categories.count_documents({}) == 0:
 
     insert_categories = db.categories.insert_many(categories)
 
-    # Recipes
+# Recipes
 if recipes.count_documents({}) == 0:
     recipes = [
         {
