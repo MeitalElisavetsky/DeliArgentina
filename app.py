@@ -170,7 +170,7 @@ def logout():
 
 
 # Home page
-@app.route('/')
+#@app.route('/')
 def home():
     categories = db.categories.find()
     if 'username' in session:
