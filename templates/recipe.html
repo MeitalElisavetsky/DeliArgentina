@@ -21,6 +21,9 @@
     
     <div class="container">
         <h2 class="recipe-title">{{ recipe.name }}</h2>
+        <div class="recipe-info">
+            <p class="added-info">Added by: {{ recipe.added_by }}, published on {{ recipe.date_added }}</p>
+        </div>
         <div class="recipe-content">
             <div class="description">
                 <p>{{ recipe.description }}</p>

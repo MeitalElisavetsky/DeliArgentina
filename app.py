@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
 from bson import ObjectId
 from pymongo import MongoClient
+from datetime import datetime
 import os
 import bcrypt
 from db import *
@@ -22,6 +23,8 @@ categories = db['categories']
 recipes = db['recipes']
 
 users = db['users']
+
+
 
 
 #Add sample data
@@ -64,7 +67,9 @@ if recipes.count_documents({}) == 0:
                 "For sealing and brushing:",
                 "1 egg, beaten (for egg wash)"
             ],
-            "instructions": "Prepare the Dough:\n\nIn a large bowl, combine the flour and salt...\nEnjoy your homemade Argentine beef empanadas!"
+            "instructions": "Prepare the Dough:\n\nIn a large bowl, combine the flour and salt...\nEnjoy your homemade Argentine beef empanadas!",
+            "added_by": "meityARG",
+            "date_added": "21/08/2022"
         },
         {
             "_id": ObjectId("65e4eee2d51a91baa0413c2c"),
@@ -80,7 +85,9 @@ if recipes.count_documents({}) == 0:
                 "Freshly ground black pepper, to taste",
                 "Baguette slices or crusty bread, for serving"
             ],
-            "instructions": "Preheat your oven to a high broil setting.\n\nPlace the provolone round in a cast-iron skillet or an ovenproof dish...\nServe the Provoleta immediately while it's hot, with slices of baguette or crusty bread for dipping."
+            "instructions": "Preheat your oven to a high broil setting.\n\nPlace the provolone round in a cast-iron skillet or an ovenproof dish...\nServe the Provoleta immediately while it's hot, with slices of baguette or crusty bread for dipping.",
+            "added_by": "meityARG",
+            "date_added": "21/08/2022"
         },
         {
             "_id": ObjectId("65e71d40e1c2df54916560c5"),
@@ -101,7 +108,9 @@ if recipes.count_documents({}) == 0:
                 "For the Corn Husks:",
                 "Dried corn husks, soaked in warm water for about 1 hour"
             ],
-            "instructions": "For the Filling:\r\n\r\nIn a large skillet, heat olive oil over medium heat. Add chopped onions and red bell pepper, cooking until softened...\nHumita en Chala is a delightful appetizer that captures the essence of Argentinean cuisine with its rich corn flavor and aromatic spices..."
+            "instructions": "For the Filling:\r\n\r\nIn a large skillet, heat olive oil over medium heat. Add chopped onions and red bell pepper, cooking until softened...\nHumita en Chala is a delightful appetizer that captures the essence of Argentinean cuisine with its rich corn flavor and aromatic spices...",
+            "added_by": "meityARG",
+            "date_added": "21/08/2022"
         },
         {
             "_id": ObjectId("65e7a72765e0bcbc6d3775e9"),
@@ -114,7 +123,9 @@ if recipes.count_documents({}) == 0:
                 "Two spoons of mayonnaise",
                 "Half a lemon's juice"
             ],
-            "instructions": "Prepare the rice:\n\nIn a pot, add water and let it boil...\nServe:\n\nFirst of all open your tuna and let the oil/water drain a bit, after that add your tuna to a bowl, a can of tuna, mayonnaise and half a lemon's juice, stir and enjoy! (You can even add boiled eggs but Ariel doesn't like it much)"
+            "instructions": "Prepare the rice:\n\nIn a pot, add water and let it boil...\nServe:\n\nFirst of all open your tuna and let the oil/water drain a bit, after that add your tuna to a bowl, a can of tuna, mayonnaise and half a lemon's juice, stir and enjoy! (You can even add boiled eggs but Ariel doesn't like it much)",
+            "added_by": "meityARG",
+            "date_added": "06/03/2022"
         }
     ]
 
@@ -231,9 +242,13 @@ def add_recipe():
         ingredients = request.form['ingredients'].split('\r\n')
         instructions = request.form['instructions']
         description = request.form['description']
+        added_by = session['username']
+
+        date_added = datetime.now().strftime("%d/%m/%Y")
+
 
         # Call the function from db.py to add the recipe
-        success, message = db_add_recipe(name, category_id, description, ingredients, instructions)
+        success, message = db_add_recipe(name, category_id, description, ingredients, instructions, added_by, date_added)
 
         if success:
             return redirect(url_for('home'))

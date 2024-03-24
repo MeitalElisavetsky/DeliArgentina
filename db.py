@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 from flask import request
 from bson import ObjectId
+from datetime import datetime
 import bcrypt
 import os
 
@@ -72,7 +73,10 @@ def get_recipe_by_id(recipe_id):
                 "description": 1,
                 "ingredients": 1,
                 "instructions": 1,
-                "category_name": "$category_info.name"
+                "category_name": "$category_info.name",
+                "added_by": 1,
+                "date_added": 1
+            
             }
         }
     ]).next()
@@ -112,10 +116,14 @@ def get_recipe_names():
     return recipe_names
 
 
-def db_add_recipe(name, category_id, description, ingredients, instructions):
+def db_add_recipe(name, category_id, description, ingredients, instructions, added_by, date_added):
     # Validate inputs
     if any(char in "!@#$%^&*" for char in name):
         return False, "Recipe name cannot contain special characters"
+
+    #Function to get current day recipe was added
+    date_added = datetime.now().strftime("%d/%m/%Y")
+
 
     # Insert into MongoDB
     db.recipes.insert_one({
@@ -123,7 +131,9 @@ def db_add_recipe(name, category_id, description, ingredients, instructions):
         'category': ObjectId(category_id),
         'description': description,
         'ingredients': ingredients,
-        'instructions': instructions
+        'instructions': instructions,
+        'added_by': added_by,
+        'date_added': date_added
     })
 
     return True, "Recipe added successfully"
